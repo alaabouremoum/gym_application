@@ -1,11 +1,10 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/modules/sideBar.dart';
 import 'package:flutter_application_1/widgets/user.dart';
 import 'package:get/get.dart';
 import 'DataController.dart';
-
 
 class Home extends StatefulWidget {
   @override
@@ -13,20 +12,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
- final DataController dataController = Get.put(DataController());   
+  final DataController dataController = Get.put(DataController());
 
- List<User> _filteredUsers = [];
+  List<User> _filteredUsers = [];
 
-void _deleteUser(User user) {
- 
+  void _deleteUser(User user) {
     dataController.deleteUser(user);
-  
-} 
+  }
 
   void _paymentUser(User user) {
     dataController.startTimer(user);
   }
-void searchUser(String query) {
+
+  void searchUser(String query) {
     List<User> users = dataController.users;
     if (query.isNotEmpty) {
       List<User> filteredUsers = [];
@@ -45,24 +43,45 @@ void searchUser(String query) {
       });
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: TextField(
-          onChanged: (query) => searchUser(query),
-          decoration: InputDecoration(
-            hintText: 'Search',
-            hintStyle: TextStyle(color: Colors.white),
-            suffixIcon: Icon(Icons.search),
-            border: InputBorder.none,
+        backgroundColor: Colors.transparent,
+        title: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, ),
+          decoration: BoxDecoration(
+              color: Colors.grey[400],
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ]),
+          child: TextField(
+            onChanged: (query) => searchUser(query),
+            decoration: InputDecoration(
+              hintText: 'Search',
+              hintStyle: TextStyle(color: Colors.white),
+              suffixIcon: Icon(Icons.search),
+              border: InputBorder.none,
+            ),
+            style: TextStyle(color: Colors.white),
           ),
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+        ), 
+        actions: [ 
+          IconButton( icon: Icon(Icons.menu), 
+          color: Colors.black,
+            onPressed: () => Scaffold.of(context).openDrawer(),)
+        ], 
+        
+      ), 
+      drawer: SideBar(),
       body: Container(
         color: Colors.grey[300],
         padding: EdgeInsets.all(16.0),
