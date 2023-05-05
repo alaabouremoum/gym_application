@@ -41,7 +41,7 @@ class _BottomNavBarState extends State<BottomNavBar> {   int _selectedIndex = 0;
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (context) => const Settings(),
+          builder: (context) =>  Settings(),
         );
       },
     ), 

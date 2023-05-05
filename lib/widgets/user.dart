@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,13 +11,31 @@ class User extends StatelessWidget {
    final String ?name;
   final String ?phoneNumber;
   final String ?photoPath; 
-  final   VoidCallback? onDelete; 
-  final VoidCallback? payment; 
-    final RxInt? remainingTime;
-  const User({super.key , this.name ,this.phoneNumber , this.photoPath,this.onDelete, this.payment,this.remainingTime});
-   
+  final   VoidCallback? onDelete;  
+  // final RxInt? remainingTime;
+  // final VoidCallback? payment;        
+    // final RxInt? remainingTime;                                          // this.paymen
+  const User({super.key , this.name ,this.phoneNumber , this.photoPath,this.onDelete,  });
+    
+  
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
+    RxInt remainingTime = 30.obs;
+       void _startTimer() {  
+        
+      
+    const oneSec = const Duration(seconds: 1);
+    Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (remainingTime!.value == 0) {
+          timer.cancel();
+        } else {
+          remainingTime!.value--;
+        }
+      },
+    );
+  }
     return Container( 
          width: 300, 
          height: 200,  
@@ -62,10 +81,10 @@ class User extends StatelessWidget {
                         
          
                       ),
-                       child: Text('Counter: ${remainingTime?.value}')),
+                       child: Obx(()=>Text('Counter: ${remainingTime}'))),
                     
                     const SizedBox(width: 25,),
-                       ElevatedButton(onPressed: payment!, child: Text('payment')),  
+                       ElevatedButton(onPressed: _startTimer, child: Text('payment')),  
                          const SizedBox(width: 25,),
          
                        ElevatedButton(onPressed: onDelete!, child: Text('Delete')),
@@ -77,4 +96,5 @@ class User extends StatelessWidget {
          ),
     );
   }
-} 
+}
+  
